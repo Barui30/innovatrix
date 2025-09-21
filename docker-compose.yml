@@ -1,0 +1,22 @@
+services:
+  backend:
+    build: ./backend
+    container_name: resume-backend
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env   # contains your OPENAI_API_KEY etc.
+    volumes:
+      - ./backend:/app
+
+  frontend:
+    build: ./frontend
+    container_name: resume-frontend
+    ports:
+      - "8501:8501"
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app
+    command: >
+      streamlit run app.py --server.port=8501 --server.address=0.0.0.0
